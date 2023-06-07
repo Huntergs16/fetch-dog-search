@@ -60,7 +60,7 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col items-center min-w-[350px] max-w-[900px]">
+    <div className="w-full h-full flex flex-col items-center min-w-[350px] max-w-[500px]">
       <form className='h-max bg-[#fba819] bg-opacity-60 shadow-xl border-[#fba819] border-double border flex flex-col items-center py-10 px-6 gap-4 w-full rounded-xl' onSubmit={handleSubmit}>
         <div className='flex flex-col w-5/6'>
           <label className='font-semibold text-lg' htmlFor="name">Name:</label>

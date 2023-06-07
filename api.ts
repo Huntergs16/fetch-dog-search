@@ -44,14 +44,55 @@ export const searchDogs = async (queryParameters: {
   ageMin?: number;
   ageMax?: number;
 }) => {
-  const response = await fetchWithAuth('/dogs/search', 'GET', queryParameters);
+  const url = `/dogs/search`;
+
+  // Remove undefined and convert arrays to comma-separated strings
+  const processedQueryParameters: Record<string, string> = {};
+
+  if (queryParameters.breeds && queryParameters.breeds.length > 0) {
+    processedQueryParameters.breeds = queryParameters.breeds.join(',');
+  }
+
+  if (queryParameters.zipCodes && queryParameters.zipCodes.length > 0) {
+    processedQueryParameters.zipCodes = queryParameters.zipCodes.join(',');
+  }
+
+  if (queryParameters.ageMin !== undefined) {
+    processedQueryParameters.ageMin = queryParameters.ageMin.toString();
+  }
+
+  if (queryParameters.ageMax !== undefined) {
+    processedQueryParameters.ageMax = queryParameters.ageMax.toString();
+  }
+
+  const queryParams = new URLSearchParams(processedQueryParameters);
+  const completeUrl = `${url}?${queryParams}`;
+  console.log('Search URL:', completeUrl);
+
+  const response = await fetchWithAuth(completeUrl, 'GET');
   return response;
 };
 
-// Function to search dogs with filter options
-export const fetchDogs = async (queryParameters: {
-  id?: string[];
-}) => {
-  const response = await fetchWithAuth('/dogs', 'POST', queryParameters);
+// Function to fetch dogs by IDs
+export const fetchDogs = async (dogIds: string[]) => {
+  const response = await fetchWithAuth('/dogs', 'POST', dogIds);
+  return response;
+};
+
+// Function to fetch next results
+export const fetchNextResults = async (nextResultsUrl: string) => {
+  const response = await fetchWithAuth(nextResultsUrl);
+  return response;
+}
+
+// Function to get previous results
+export const fetchPreviousResults = async (previousResultsUrl: string) => {
+  const response = await fetchWithAuth(previousResultsUrl);
+  return response;
+}
+
+// Function to match with a dog for adoption
+export const matchDogForAdoption = async (dogIds: string[]) => {
+  const response = await fetchWithAuth('/dogs/match', 'POST', dogIds);
   return response;
 };

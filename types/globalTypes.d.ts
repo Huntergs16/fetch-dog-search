@@ -1,4 +1,6 @@
-export interface Dog {
+import { convertAgeToString } from './utils';
+
+interface Dog {
     id: string
     img: string
     name: string
@@ -7,6 +9,11 @@ export interface Dog {
     breed: string
 }
 
+// Update the Dog interface using a custom getter for the age property
+export interface DogWithCustomAge extends Dog {
+    age: number | string;
+}
+  
 export interface Location {
     zip_code: string
     latitude: number
@@ -21,4 +28,8 @@ export interface DogSearchResult {
     total: number;
     next?: string;
     prev?: string;
-  }
+}
+
+export interface Match {
+    match: string
+}
