@@ -1,14 +1,12 @@
 'use client'
 
 import React, { useState } from 'react';
-import axios from 'axios';
-import Link from 'next/link';
 import Image from 'next/image';
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen w-screen flex-col items-center justify-start p-24">
-      <div className="relative w-1/2 h-full">
+    <main className="flex min-h-[97vh] w-screen flex-col items-center justify-start gap-4 p-24">
+      <div className="relative w-1/2 min-w-[200px] max-w-[500px] h-full">
         <Image
           src="/fetch_logo.png"
           alt="fetch_logo"
@@ -19,6 +17,7 @@ export default function Home() {
           style={{objectFit: 'cover'}}
         />
       </div>
+      <p className='text-[#1b191b] text-4xl sm:text-6xl w-full max-w-[1000px] text-center font-sans font-bold'>PawFinder</p>
       <Login />
     </main>
   )

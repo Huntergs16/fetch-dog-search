@@ -1,6 +1,6 @@
-'use client';
+'use client'
 
-import { MouseEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { 
   fetchBreeds, 
   searchDogs, 
@@ -102,7 +102,14 @@ const DogsPage = () => {
   }
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div className='flex flex-col gap-12 w-screen min-h-screen justify-center items-center'>
+        <div className='animate-bounce'>
+          <Image className='motion-safe:animate-[spin_1.75s_linear_infinite]' width={120} height={120} alt='loading bone' src={"/bone.png"}/>
+        </div>
+        <p className='text-[#1b191b] text-4xl sm:text-6xl w-full max-w-[1000px] text-center font-sans font-bold'>Loading...</p>
+      </div>
+    )
   }
 
   async function handleNextResults() {
@@ -165,7 +172,7 @@ const DogsPage = () => {
 
 
   return (
-    <main className='flex min-h-screen w-screen flex-col items-center justify-start gap-6 p-6 sm:p-24'>
+    <main className='flex min-h-[97vh] w-screen flex-col items-center justify-start gap-6 p-6 sm:p-24'>
       <p className='text-[#1b191b] text-4xl sm:text-6xl w-full max-w-[1000px] text-center font-sans font-bold'>Find Your Furry Friend Today</p>
       <form className='flex flex-wrap justify-center h-max bg-[#fba819] bg-opacity-60 shadow-xl border-[#fba819] border-double border py-10 px-6 gap-4 w-full max-w-[1000px] rounded-xl' onSubmit={handleFormSubmit}>
       <div className='flex flex-col justify-center items-center w-full'>
