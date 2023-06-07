@@ -101,17 +101,6 @@ const DogsPage = () => {
     console.log(searchRes)
   }
 
-  if (loading) {
-    return (
-      <div className='flex flex-col gap-12 w-screen min-h-screen justify-center items-center'>
-        <div className='animate-bounce'>
-          <Image className='motion-safe:animate-[spin_1.75s_linear_infinite]' width={120} height={120} alt='loading bone' src={"/bone.png"}/>
-        </div>
-        <p className='text-[#1b191b] text-4xl sm:text-6xl w-full max-w-[1000px] text-center font-sans font-bold'>Loading...</p>
-      </div>
-    )
-  }
-
   async function handleNextResults() {
     console.log("inside handleNextResutls")
     console.log("nextQuery = ", nextQuery)
@@ -172,111 +161,122 @@ const DogsPage = () => {
 
 
   return (
-    <main className='flex min-h-[97vh] w-screen flex-col items-center justify-start gap-6 p-6 sm:p-24'>
-      <p className='text-[#1b191b] text-4xl sm:text-6xl w-full max-w-[1000px] text-center font-sans font-bold'>Find Your Furry Friend Today</p>
-      <form className='flex flex-wrap justify-center h-max bg-[#fba819] bg-opacity-60 shadow-xl border-[#fba819] border-double border py-10 px-6 gap-4 w-full max-w-[1000px] rounded-xl' onSubmit={handleFormSubmit}>
-      <div className='flex flex-col justify-center items-center w-full'>
-          <input
-            placeholder='Breed'
-            className={`w-4/5 sm:w-1/2 focus:py-2 transition-all duration-100 px-2 py-1 rounded-lg focus:border border-black text-slate-200 bg-[#1b191b] ${inputFocused ? 'border-black' : ''}`}
-            type='text'
-            id='breeds'
-            name='breeds'
-            value={currSelectedBreed}
-            onChange={handleInputChange}
-          />
-          {inputFocused && searchResults.length > 0 && (
-            <div className='w-[90%] mt-2 p-2 rounded-lg bg-[#1b191b] text-slate-200 overflow-y-hidden max-h-20'>
-              <ul>
-                {searchResults.map((result, index) => (
-                  <li
-                    key={index}
-                    className='cursor-pointer hover:text-blue-500'
-                    onClick={() => handleBreedClick(result)}
-                  >
-                    {result}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          <ul className='flex justify-center items-center flex-wrap gap-2 w-full'>
-            {selectedBreeds.map((breed, index) => (
-              <li key={index} className='text-slate-800'>
-                {index === (selectedBreeds.length-1) ? `${breed}` : `${breed},`} 
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className='grid grid-cols-4 place-items-center w-full'>
-          <div />
-          <input
-            placeholder='Zip Code'
-            className='w-full col-span-2 focus:py-2 transition-all duration-100 px-2 py-1 rounded-lg focus:border border-black text-slate-200 bg-[#1b191b]'
-            type='text'
-            id='zipCodes'
-            name='zipCodes'
-            value={currZipCode}
-            onChange={((event) => setCurrZipCode(event?.currentTarget.value))}
-          />
-          <button className='text-5xl mr-auto relative bottom-1 hover:opacity-70' onClick={(event) => {
-            event.preventDefault()
-            handleZipCodeChange(currZipCode || "")
-            }}>+</button>
-          <ul className='col-span-4 flex justify-center items-center flex-wrap gap-2'>
-            {zipCodes.map((zipcode, index) => (
-              <li key={index} className='text-slate-800'>
-                {index === (zipCodes.length-1) ? `${zipcode}` : `${zipcode},`} 
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className='flex flex-col justify-center items-center gap-1'>
-          <div className='grid grid-cols-3 place-items-center'>
-            <p className='ml-auto text-slate-800 font-semibold'>Min Age:</p>
+    <>
+    {loading ? 
+      <div className='flex flex-col gap-12 w-screen min-h-screen justify-center items-center'>
+      <div className='animate-bounce'>
+        <Image className='motion-safe:animate-[spin_1.75s_linear_infinite]' width={120} height={120} alt='loading bone' src={"/bone.png"}/>
+      </div>
+      <p className='text-[#1b191b] text-4xl sm:text-6xl w-full max-w-[1000px] text-center font-sans font-bold'>Loading...</p>
+    </div>
+    :
+      <main className='flex min-h-[97vh] w-screen flex-col items-center justify-start gap-6 p-6 sm:p-24'>
+        <p className='text-[#1b191b] text-4xl sm:text-6xl w-full max-w-[1000px] text-center font-sans font-bold'>Find Your Furry Friend Today</p>
+        <form className='flex flex-wrap justify-center h-max bg-[#fba819] bg-opacity-60 shadow-xl border-[#fba819] border-double border py-10 px-6 gap-4 w-full max-w-[1000px] rounded-xl' onSubmit={handleFormSubmit}>
+        <div className='flex flex-col justify-center items-center w-full'>
             <input
-              placeholder='Min Age'
-              className='w-3/4 focus:py-2 transition-all duration-100 px-2 py-1 rounded-lg focus:border border-black text-slate-200 bg-[#1b191b]'
-              type='number'
-              id='ageMin'
-              name='ageMin'
-              value={ageMin}
-              onChange={(event) => setAgeMin(Number(event?.currentTarget.value))}
-              />
-              <div />
+              placeholder='Breed'
+              className={`w-4/5 sm:w-1/2 focus:py-2 transition-all duration-100 px-2 py-1 rounded-lg focus:border border-black text-slate-200 bg-[#1b191b] ${inputFocused ? 'border-black' : ''}`}
+              type='text'
+              id='breeds'
+              name='breeds'
+              value={currSelectedBreed}
+              onChange={handleInputChange}
+            />
+            {inputFocused && searchResults.length > 0 && (
+              <div className='w-[90%] mt-2 p-2 rounded-lg bg-[#1b191b] text-slate-200 overflow-y-hidden max-h-20'>
+                <ul>
+                  {searchResults.map((result, index) => (
+                    <li
+                      key={index}
+                      className='cursor-pointer hover:text-blue-500'
+                      onClick={() => handleBreedClick(result)}
+                    >
+                      {result}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <ul className='flex justify-center items-center flex-wrap gap-2 w-full'>
+              {selectedBreeds.map((breed, index) => (
+                <li key={index} className='text-slate-800'>
+                  {index === (selectedBreeds.length-1) ? `${breed}` : `${breed},`} 
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <div className='grid grid-cols-3 place-items-center'>
-            <p className='ml-auto text-slate-800 font-semibold'>Max Age: </p>
-            <input
-              placeholder='Max Age'
-              className='w-3/4 focus:py-2 transition-all duration-100 px-2 py-1 rounded-lg focus:border border-black text-slate-200 bg-[#1b191b]'
-              type='number'
-              id='ageMax'
-              name='ageMax'
-              value={ageMax}
-              onChange={(event) => setAgeMax(Number(event?.currentTarget.value))}
-              />
+          <div className='grid grid-cols-4 place-items-center w-full'>
             <div />
+            <input
+              placeholder='Zip Code'
+              className='w-full col-span-2 focus:py-2 transition-all duration-100 px-2 py-1 rounded-lg focus:border border-black text-slate-200 bg-[#1b191b]'
+              type='text'
+              id='zipCodes'
+              name='zipCodes'
+              value={currZipCode}
+              onChange={((event) => setCurrZipCode(event?.currentTarget.value))}
+            />
+            <button className='text-5xl mr-auto relative bottom-1 hover:opacity-70' onClick={(event) => {
+              event.preventDefault()
+              handleZipCodeChange(currZipCode || "")
+              }}>+</button>
+            <ul className='col-span-4 flex justify-center items-center flex-wrap gap-2'>
+              {zipCodes.map((zipcode, index) => (
+                <li key={index} className='text-slate-800'>
+                  {index === (zipCodes.length-1) ? `${zipcode}` : `${zipcode},`} 
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
 
-        <div className='w-full flex justify-center items-center gap-10'>
-          <button className='w-1/5 bg-slate-200 bg-opacity-70 min-w-max px-4 py-2 text-[#1b191b] font-medium rounded-lg hover:opacity-70' onClick={(event) => handleClearSearch(event)}>
-            Clear
-          </button>
-          <button className='w-1/5 bg-[#1b191b] min-w-max px-4 py-2 text-slate-200 rounded-lg hover:opacity-70' type='submit'>
-            Search
-          </button>
-        </div>
-      </form>
+          <div className='flex flex-col justify-center items-center gap-1'>
+            <div className='grid grid-cols-3 place-items-center'>
+              <p className='ml-auto text-slate-800 font-semibold'>Min Age:</p>
+              <input
+                placeholder='Min Age'
+                className='w-3/4 focus:py-2 transition-all duration-100 px-2 py-1 rounded-lg focus:border border-black text-slate-200 bg-[#1b191b]'
+                type='number'
+                id='ageMin'
+                name='ageMin'
+                value={ageMin}
+                onChange={(event) => setAgeMin(Number(event?.currentTarget.value))}
+                />
+                <div />
+            </div>
 
-      <MatchFinder toggleFavorite={toggleFavoriteAdd} favoritesIds={favoritesIds} favoriteDogs={favorites}/>
+            <div className='grid grid-cols-3 place-items-center'>
+              <p className='ml-auto text-slate-800 font-semibold'>Max Age: </p>
+              <input
+                placeholder='Max Age'
+                className='w-3/4 focus:py-2 transition-all duration-100 px-2 py-1 rounded-lg focus:border border-black text-slate-200 bg-[#1b191b]'
+                type='number'
+                id='ageMax'
+                name='ageMax'
+                value={ageMax}
+                onChange={(event) => setAgeMax(Number(event?.currentTarget.value))}
+                />
+              <div />
+            </div>
+          </div>
 
-      {dogsFound.length > 0 && <SearchResultsSection favoritesIds={favoritesIds} handleFavorite={toggleFavoriteAdd} dogsFound={dogsFound} getNext={handleNextResults} getPrev={handlePrevResults} />}
-    </main>
+          <div className='w-full flex justify-center items-center gap-10'>
+            <button className='w-1/5 bg-slate-200 bg-opacity-70 min-w-max px-4 py-2 text-[#1b191b] font-medium rounded-lg hover:opacity-70' onClick={(event) => handleClearSearch(event)}>
+              Clear
+            </button>
+            <button className='w-1/5 bg-[#1b191b] min-w-max px-4 py-2 text-slate-200 rounded-lg hover:opacity-70' type='submit'>
+              Search
+            </button>
+          </div>
+        </form>
+
+        <MatchFinder toggleFavorite={toggleFavoriteAdd} favoritesIds={favoritesIds} favoriteDogs={favorites}/>
+
+        {dogsFound.length > 0 && <SearchResultsSection favoritesIds={favoritesIds} handleFavorite={toggleFavoriteAdd} dogsFound={dogsFound} getNext={handleNextResults} getPrev={handlePrevResults} />}
+      </main>
+    }
+    </>
   );
 };
 
