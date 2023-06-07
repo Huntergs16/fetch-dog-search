@@ -16,7 +16,7 @@ import { setTimeout } from 'timers';
 
 const DogsPage = () => {
   const [breeds, setBreeds] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [searchResults, setSearchResults] = useState<string[]>([]);
   const [inputFocused, setInputFocused] = useState(false);
   const [selectedBreeds, setSelectedBreeds] = useState<string[]>([]); // Array to store selected breeds
