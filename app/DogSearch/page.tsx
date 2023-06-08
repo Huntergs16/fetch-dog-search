@@ -38,6 +38,8 @@ const DogsPage = () => {
 
   const [sortType, setSortType] = useState<string>("breed:asc")
 
+  const [searchMade, setSearchMade] = useState<boolean>(false)
+
   const handleBreedSearch = (event: { target: { value: string; }; }) => {
     const searchText = event.target.value.toLowerCase();
     const filteredBreeds = breeds.filter((breed: string) => breed.toLowerCase().includes(searchText));
@@ -88,6 +90,8 @@ const DogsPage = () => {
     console.log('form submitted');
     console.log('Selected Breeds:', selectedBreeds);
     console.log('Zip Codes:', zipCodes);
+    setDogsFound([]);
+    setSearchMade(true);
     const searchRes:DogSearchResult = await searchDogs({breeds: selectedBreeds, zipCodes, ageMin, ageMax, sort: sortType});
     if (searchRes.total != 0) {
       const dogsFound = await fetchDogs(searchRes.resultIds)
@@ -181,6 +185,7 @@ const DogsPage = () => {
     setPrevQuery(undefined);
     setAgeMin(0);
     setAgeMax(15);
+    setSearchMade(false);
   }
 
 
@@ -290,7 +295,7 @@ const DogsPage = () => {
 
       <MatchFinder toggleFavorite={toggleFavoriteAdd} favoritesIds={favoritesIds} favoriteDogs={favorites}/>
 
-      {dogsFound.length > 0 && <SearchResultsSection sortType={sortType} toggleSortType={handleSortChange} favoritesIds={favoritesIds} handleFavorite={toggleFavoriteAdd} dogsFound={dogsFound} getNext={handleNextResults} getPrev={handlePrevResults} />}
+      {searchMade && <SearchResultsSection sortType={sortType} toggleSortType={handleSortChange} favoritesIds={favoritesIds} handleFavorite={toggleFavoriteAdd} dogsFound={dogsFound} getNext={handleNextResults} getPrev={handlePrevResults} />}
     </main>
   );
 };
@@ -306,7 +311,12 @@ const SearchResultsSection = ({dogsFound, getNext, getPrev, handleFavorite, favo
     toggleSortType: () => void,
 }) => {
   return (
-    <div className='flex flex-wrap justify-center h-max bg-[#fba819] bg-opacity-60 shadow-xl border-[#fba819] border-double border py-10 px-6 gap-4 w-full max-w-[1000px] rounded-xl'>
+    <div className='flex flex-col items-center h-max bg-[#fba819] bg-opacity-60 shadow-xl border-[#fba819] border-double border py-10 px-6 max-w-[1000px] rounded-xl w-full'>
+      {dogsFound.length === 0 ? 
+      (
+      <p className='text-2xl font-bold'>No Results Found. Please Try again</p>
+      ) : (
+      <div className='flex flex-wrap justify-center gap-4 w-full'>
         <ResultsNavigator sortType={sortType} toggleSortType={toggleSortType} getNext={getNext} getPrev={getPrev} />
         <ul className='flex flex-col gap-4 w-full text-base'>
           {dogsFound.map((dog, index) => (
@@ -328,6 +338,8 @@ const SearchResultsSection = ({dogsFound, getNext, getPrev, handleFavorite, favo
         </ul>
         <ResultsNavigator sortType={sortType} toggleSortType={toggleSortType} getNext={getNext} getPrev={getPrev} />
       </div>
+      )}
+    </div>
   )
 }
 
