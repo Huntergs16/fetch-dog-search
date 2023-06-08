@@ -6,8 +6,8 @@ import Image from 'next/image';
 
 export default function Home() {
   return (
-    <main className="flex min-h-[97vh] w-screen flex-col items-center justify-start gap-4 p-16`">
-      <div className="relative w-1/2 min-w-[200px] max-w-[500px] h-full">
+    <main className="flex min-h-[97vh] w-screen flex-col items-center justify-start gap-16 p-16`">
+      <div className="relative w-1/3 min-w-[200px] max-w-[500px] h-full">
         <Image
           src="/fetch_logo.png"
           alt="fetch_logo"
@@ -53,7 +53,7 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col items-center min-w-[350px] max-w-[500px]">
+    <div className="w-full h-full px-6 flex flex-col items-center min-w-[350px] max-w-[500px]">
       <form className="h-max bg-[#fba819] bg-opacity-60 shadow-xl border-[#fba819] border-double border flex flex-col items-center py-10 px-6 gap-4 w-full rounded-xl" >
         <div className="flex flex-col w-5/6">
           <label className="font-semibold text-lg" htmlFor="name">Name:</label>
