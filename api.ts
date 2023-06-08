@@ -70,7 +70,7 @@ export const searchDogs = async (queryParameters: {
   }
 
   const queryParams = new URLSearchParams(processedQueryParameters);
-  const completeUrl = `${url}?${queryParameters}`;
+  const completeUrl = `${url}?${queryParams}`;
   console.log('Search URL:', completeUrl);
 
   const response = await fetchWithAuth(completeUrl, 'GET');
