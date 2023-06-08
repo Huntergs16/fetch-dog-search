@@ -48,11 +48,11 @@ const DogsPage = () => {
       try {
         const dogsData = await fetchBreeds();
         setProgress("Data fetch complete. Setting dog Data and stopping load");
-        setProgress(dogsData)
         console.log(dogsData)
         setBreeds(dogsData);
         setLoading(false);
       } catch (error) {
+        setProgress("Data fetch failed ");
         console.error('Error fetching dogs:', error);
       }
     };
@@ -269,11 +269,13 @@ const DogsPage = () => {
         </div>
 
         <div className='w-full flex justify-center items-center gap-10'>
-          <button className='w-1/5 bg-slate-200 bg-opacity-70 min-w-max px-4 py-2 text-[#1b191b] font-medium rounded-lg hover:opacity-70' onClick={(event) => handleClearSearch(event)}>
+          <button className='w-1/5 bg-slate-200 bg-opacity-40 min-w-max px-4 py-2 text-[#1b191b] font-semibold rounded-lg hover:opacity-70' onClick={(event) => handleClearSearch(event)}>
             Clear
           </button>
-          <button className='w-1/5 bg-[#1b191b] min-w-max px-4 py-2 text-slate-200 rounded-lg hover:opacity-70' type='submit'>
-            Search
+          <button className='grid grid-cols-3 justify-center w-1/5 bg-[#1b191b] min-w-max px-4 py-2 text-slate-200 rounded-lg hover:opacity-70' type='submit'>
+            <div />
+            <p>Search</p>
+            <Image className='place-self-center opacity-80' src={"/white-search-icon.png"} width={20} height={20} alt='search' />
           </button>
         </div>
       </form>
@@ -297,7 +299,7 @@ const SearchResultsSection = ({dogsFound, getNext, getPrev, handleFavorite, favo
     <div className='flex flex-wrap justify-center h-max bg-[#fba819] bg-opacity-60 shadow-xl border-[#fba819] border-double border py-10 px-6 gap-4 w-full max-w-[1000px] rounded-xl'>
         <ResultsNavigator getNext={getNext} getPrev={getPrev} />
         <ul className='flex flex-col gap-4 w-full text-base'>
-        <li className='text-lg grid grid-cols-6 sm:grid-cols-7 w-full place-items-center gap-4'>
+        {/* <li className='text-lg grid grid-cols-6 sm:grid-cols-7 w-full place-items-center gap-4'>
               <div />
               <div />
               <div />
@@ -306,21 +308,21 @@ const SearchResultsSection = ({dogsFound, getNext, getPrev, handleFavorite, favo
               <p className='hidden sm:block'>Breed</p>
               <p>Age</p>
               <p>Zipcode</p>
-              </li>
+              </li> */}
           {dogsFound.map((dog, index) => (
             <li className='grid grid-cols-6 sm:grid-cols-7 w-full place-items-center gap-4' key={index}>
               <Image onClick={() => handleFavorite(dog)} className='bg-transparent cursor-pointer hover:scale-110 active:scale-90' alt='like button' width={30} height={30} src={favoritesIds.includes(dog.id) ? "/heart-filled.png" : "/heart-like-button.png"} />
-              <div className='col-span-2 relative w-full h-48 rounded-xl overflow-hidden hover:h-52 transition-all duration-100 ease-linear'>
+              <div className='col-span-3 relative w-full h-52 sm:h-64 rounded-xl overflow-hidden hover:h-60 sm:hover:h-72 transition-all duration-100 ease-linear'>
                 <Image className='rounded-xl object-fill hover:object-contain transition-all duration-1000 ease-in' src={dog.img} fill alt={`${dog.name} the ${dog.breed}`} />
               </div>
-              <div className='flex flex-col place-items-center sm:hidden'>
-                <p>{dog.name}</p>
-                <p>{dog.breed}</p>
+              <div className='col-span-2 sm:col-span-3 gap-6 flex flex-col md:flex-row justify-center items-center w-full h-full'>
+                <div className='flex flex-col items-start justify-center'>
+                  <p className='text-2xl font-bold'>{dog.name}</p>
+                  <p className='text-lg font-bold'>{dog.breed}</p>
+                </div>
+                <p>{convertAgeToString(dog.age)}y/o</p>
+                <p>{dog.zip_code}</p>
               </div>
-              <p className='hidden sm:block'>{dog.name}</p>
-              <p className='hidden sm:block'>{dog.breed}</p>
-              <p>{convertAgeToString(dog.age)}</p>
-              <p>{dog.zip_code}</p>
               </li>
           ))}
         </ul>
