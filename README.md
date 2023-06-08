@@ -20,31 +20,24 @@ Responsive design for optimal viewing on different devices.
 To get a local copy of the project up and running, follow these steps:
 
 ### Clone the repository:
-
-shell
-Copy code
-git clone https://github.com/Huntergs16/fetch-dog-search.git
-Navigate to the project directory:
-
-shell
-Copy code
+#### git clone https://github.com/Huntergs16/fetch-dog-search.git
+#### Navigate to the project directory:
+```
 cd fetch-dog-search
-Install the dependencies:
-
-shell
-Copy code
+```
+#### Install the dependencies:
+```
 npm install
-Create a .env.local file in the project root and provide the necessary environment variables:
-
-arduino
-Copy code
+```
+#### Create a .env.local file in the project root and provide the necessary environment variables:
+```
 NEXT_PUBLIC_API_BASE_URL=https://frontend-take-home-service.fetch.com
-Start the development server:
-
-shell
-Copy code
+```
+#### Start the development server:
+```
 npm run dev
-Open your browser and visit http://localhost:3000 to view the application.
+```
+#### Open your browser and visit http://localhost:3000 to view the application.
 
 ## Contributions
 Thanks to Fetch for the fun take home assignment! If you find any bugs, have feature requests, or want to contribute code improvements, please feel free to open issues and pull requests on the GitHub repository.
