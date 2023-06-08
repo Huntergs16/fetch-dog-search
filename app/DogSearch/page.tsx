@@ -56,7 +56,9 @@ const DogsPage = () => {
         setBreeds(dogsData);
         setLoading(false);
       } catch (error) {
-        setProgress("Data fetch failed. \n Sorry, some devices aren't receiving access to the data.");
+        setProgress("Unable to load data. Redirecting to log in page. If issue persists after login, please try a different device.");
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        window.location.href = "/";
         console.error('Error fetching dogs:', error);
       }
     };
@@ -85,7 +87,7 @@ const DogsPage = () => {
     setCurrZipCode("");
   }
 
-  async function handleFormSubmit (event: React.FormEvent) {
+  async function handleFormSubmit (event: FormEvent) {
     event.preventDefault();
     console.log('form submitted');
     console.log('Selected Breeds:', selectedBreeds);
@@ -111,10 +113,27 @@ const DogsPage = () => {
     console.log(searchRes)
   }
 
-  function handleSortChange() {
+  async function handleSortChange() {
     sortType === "breed:asc" ? setSortType("breed:desc") : setSortType("breed:asc");
-    // const event = new Event('submit');
-    // handleFormSubmit(event);
+    setDogsFound([]);
+    setSearchMade(true);
+    const searchRes:DogSearchResult = await searchDogs({breeds: selectedBreeds, zipCodes, ageMin, ageMax, sort: sortType});
+    if (searchRes.total != 0) {
+      const dogsFound = await fetchDogs(searchRes.resultIds)
+      console.log("Dogs found:", dogsFound)
+      setDogsFound(dogsFound);
+    }
+    if (searchRes.next) {
+      console.log("Next results valid")
+      setNextQuery(searchRes.next)
+    }
+    if (searchRes.prev) {
+      console.log("Previous results valid")
+      setPrevQuery(searchRes.prev)
+    }
+  
+    console.log(searchRes.total, " Dogs Found");
+    console.log(searchRes)
   }
 
   if (loading) {
@@ -186,6 +205,11 @@ const DogsPage = () => {
     setAgeMin(0);
     setAgeMax(15);
     setSearchMade(false);
+  }
+
+  const handleClearFavorites = () => {
+    setFavorites([]);
+    setFavoriteIds([]);
   }
 
 
@@ -283,7 +307,7 @@ const DogsPage = () => {
 
         <div className='w-full flex justify-center items-center gap-10'>
           <button className='w-1/5 bg-slate-200 bg-opacity-40 min-w-max px-4 py-2 text-[#1b191b] font-semibold rounded-lg hover:opacity-70' onClick={(event) => handleClearSearch(event)}>
-            Clear
+            Reset
           </button>
           <button className='grid grid-cols-3 justify-center w-1/5 bg-[#1b191b] min-w-max px-4 py-2 text-slate-200 rounded-lg hover:opacity-70' type='submit'>
             <div />
@@ -293,7 +317,7 @@ const DogsPage = () => {
         </div>
       </form>
 
-      <MatchFinder toggleFavorite={toggleFavoriteAdd} favoritesIds={favoritesIds} favoriteDogs={favorites}/>
+      <MatchFinder handleClearFavorites={handleClearFavorites} toggleFavorite={toggleFavoriteAdd} favoritesIds={favoritesIds} favoriteDogs={favorites}/>
 
       {searchMade && <SearchResultsSection sortType={sortType} toggleSortType={handleSortChange} favoritesIds={favoritesIds} handleFavorite={toggleFavoriteAdd} dogsFound={dogsFound} getNext={handleNextResults} getPrev={handlePrevResults} />}
     </main>
@@ -312,12 +336,14 @@ const SearchResultsSection = ({dogsFound, getNext, getPrev, handleFavorite, favo
 }) => {
   return (
     <div className='flex flex-col items-center h-max bg-[#fba819] bg-opacity-60 shadow-xl border-[#fba819] border-double border py-10 px-6 max-w-[1000px] rounded-xl w-full'>
-      {dogsFound.length === 0 ? 
-      (
-      <p className='text-2xl font-bold'>No Results Found. Please Try again</p>
-      ) : (
       <div className='flex flex-wrap justify-center gap-4 w-full'>
         <ResultsNavigator sortType={sortType} toggleSortType={toggleSortType} getNext={getNext} getPrev={getPrev} />
+        
+        {dogsFound.length === 0 ? 
+        (
+        <p className='text-2xl font-bold'>No Results Found. Please Try again</p>
+        ) : (
+        <div className='w-full gap-4 flex flex-col'>
         <ul className='flex flex-col gap-4 w-full text-base'>
           {dogsFound.map((dog, index) => (
             <li className='grid grid-cols-6 sm:grid-cols-7 w-full place-items-center gap-4' key={index}>
@@ -337,16 +363,18 @@ const SearchResultsSection = ({dogsFound, getNext, getPrev, handleFavorite, favo
           ))}
         </ul>
         <ResultsNavigator sortType={sortType} toggleSortType={toggleSortType} getNext={getNext} getPrev={getPrev} />
+        </div>
+        )}
       </div>
-      )}
     </div>
   )
 }
 
-const MatchFinder = ({favoriteDogs, favoritesIds, toggleFavorite}: {
+const MatchFinder = ({favoriteDogs, favoritesIds, toggleFavorite, handleClearFavorites}: {
   favoriteDogs: DogWithCustomAge[],
   favoritesIds: string[],
   toggleFavorite: (dog: DogWithCustomAge) => void,
+  handleClearFavorites: () => void;
 }) => {
 
   const [match, setMatch] = useState<DogWithCustomAge | undefined>(undefined)
@@ -426,6 +454,11 @@ const MatchFinder = ({favoriteDogs, favoritesIds, toggleFavorite}: {
       ) : (
         <p className="text-[#1b191b] text-xl sm:text-3xl w-full max-w-[1000px] text-center font-sans font-bold">Add some favorites to get matched</p>
       )}
+      { favoriteDogs.length !== 0 && (
+        <button className='w-1/6 bg-slate-200 bg-opacity-40 min-w-max px-4 py-2 text-[#1b191b] font-semibold rounded-lg hover:opacity-70' onClick={handleClearFavorites}>
+          Clear Favorites
+        </button>
+      )}
     </div>
   )
 }
@@ -440,7 +473,12 @@ const ResultsNavigator = ({getNext, getPrev, sortType, toggleSortType}: {
     <div className='w-full px-2 flex justify-between items-center'>
       <button onClick={getPrev} className='w-[10%] bg-[#1b191b] min-w-max px-3 py-1 text-slate-200 rounded-lg hover:opacity-70'>{"<-"} Prev</button>
       <div className='flex justify-center items-center'>
-        <button onClick={toggleSortType} className={`${sortType === "breed:asc" ? "rotate-90" : "-rotate-90"} text-2xl rotate-90 transition-all ease-in-out duration-200`}>{`->`}</button>
+        <button onClick={
+          (event) => {
+            event.preventDefault()
+            toggleSortType()
+          }} 
+        className={`${sortType === "breed:asc" ? "rotate-90" : "-rotate-90"} text-2xl transition-all ease-in-out duration-200`}>{`->`}</button>
         <div className='from-red-600 bg-gradient-to-tr bg-clip-text to-blue-600'>
           <p className='text-transparent text-xl font-bold'>abc</p>
         </div>
