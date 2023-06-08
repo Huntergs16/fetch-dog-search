@@ -15,7 +15,7 @@ const fetchWithAuth = async (url: string, method = 'GET', data = {}) => {
 
 // Function to log in and obtain the auth cookie
 export const login = async (name: string, email: string) => {
-  const response = await fetchWithAuth('/auth/login', 'POST', { name, email });
+  const response = await fetchWithAuth('/auth/login', 'POST', { name, email, mode: 'no-cors' });
   return response;
 };
 
@@ -27,7 +27,7 @@ export const logout = async () => {
 
 // Function to fetch dogs data
 export const fetchBreeds = async () => {
-  const response = await fetchWithAuth('/dogs/breeds');
+  const response = await fetchWithAuth('/dogs/breeds', 'GET', {mode: 'no-cors'});
   return response;
 };
 
