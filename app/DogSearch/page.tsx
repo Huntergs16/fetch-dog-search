@@ -7,7 +7,8 @@ import {
   fetchDogs, 
   fetchNextResults, 
   fetchPreviousResults, 
-  matchDogForAdoption } from '../../api';
+  matchDogForAdoption,
+  logout } from '../../api';
 import { DogWithCustomAge, DogSearchResult, Match } from "../../types/globalTypes"
 import { convertAgeToString } from '@/util/typing/util';
 import Image from 'next/image';
@@ -138,7 +139,7 @@ const DogsPage = () => {
 
   if (loading) {
     return (
-      <div className='flex flex-col gap-12 w-screen min-h-screen justify-center items-center'>
+      <div className='flex flex-col gap-12 w-screen px-10 min-h-screen justify-center items-center'>
         <div className='animate-bounce'>
           <Image className='motion-safe:animate-[spin_1.75s_linear_infinite]' width={120} height={120} alt='loading bone' src={"/bone.png"}/>
         </div>
@@ -212,10 +213,38 @@ const DogsPage = () => {
     setFavoriteIds([]);
   }
 
+  const handleLogout = async() => {
+    setFavorites([]);
+    setFavoriteIds([]);
+    setCurrZipCode("");
+    setProgress(`Logging out...`)
+    setLoading(true)
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const loggingOut = await logout();
+      setProgress(`${loggingOut}`)
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      window.location.href = "/";
+    }
+    catch {
+      setProgress(`Error logging out. Please refresh the page`)
+    }
+  }
+
 
   return (
-    <main className='flex min-h-[97vh] w-screen flex-col items-center justify-start gap-6 p-6 sm:p-24'>
-      <p className='text-[#1b191b] text-4xl sm:text-6xl w-full max-w-[1000px] text-center font-sans font-bold'>Find Your Furry Friend Today</p>
+    <main className='flex min-h-[97vh] w-screen flex-col items-center justify-start gap-6 p-6 sm:p-16'>
+      <div className='w-full h-[10vh] min-h-[100px] grid grid-cols-3 place-items-center'>
+        <div />
+        <div className='relative h-full aspect-square place-items-center'>
+          <Image src={"/fetch_logo.png"} fill alt='fetch logo' />
+        </div>
+        <button className='justify-self-end grid grid-cols-3 justify-center w-1/2 bg-[#1b191b] min-w-max px-4 py-2 text-slate-200 rounded-lg hover:opacity-70' onClick={handleLogout}>
+          <p>{`<-`}</p>
+          <p className='col-span-2'>Logout</p>
+        </button>
+      </div>
+      <p className='text-[#1b191b] text-3xl sm:text-5xl w-full max-w-[1000px] text-center font-sans font-bold'>Find Your Furry Friend Today</p>
       <form className='flex flex-wrap justify-center h-max bg-[#fba819] bg-opacity-60 shadow-xl border-[#fba819] border-double border py-10 px-6 gap-4 w-full max-w-[1000px] rounded-xl' onSubmit={handleFormSubmit}>
       <div className='flex flex-col justify-center items-center w-full'>
           <input

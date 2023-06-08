@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 export default function Home() {
   return (
-    <main className="flex min-h-[97vh] w-screen flex-col items-center justify-start gap-4 p-24">
+    <main className="flex min-h-[97vh] w-screen flex-col items-center justify-start gap-4 p-16`">
       <div className="relative w-1/2 min-w-[200px] max-w-[500px] h-full">
         <Image
           src="/fetch_logo.png"
