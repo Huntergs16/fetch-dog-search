@@ -19,7 +19,7 @@ Responsive design for optimal viewing on different devices.
 ## Getting Started
 To get a local copy of the project up and running, follow these steps:
 
-## Clone the repository:
+### Clone the repository:
 
 shell
 Copy code
