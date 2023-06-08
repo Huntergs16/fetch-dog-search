@@ -234,14 +234,14 @@ const DogsPage = () => {
 
   return (
     <main className='flex min-h-[97vh] w-screen flex-col items-center justify-start gap-6 p-6 sm:p-16'>
-      <div className='w-full h-[10vh] min-h-[100px] grid grid-cols-3 place-items-center'>
+      <div className='w-full h-[15vh] min-h-[100px] max-h-[150px] grid grid-cols-3 place-items-center'>
         <div />
         <div className='relative h-full aspect-square place-items-center'>
           <Image src={"/fetch_logo.png"} fill alt='fetch logo' />
         </div>
-        <button className='justify-self-end grid grid-cols-3 justify-center w-1/2 bg-[#1b191b] min-w-max px-4 py-2 text-slate-200 rounded-lg hover:opacity-70' onClick={handleLogout}>
+        <button className='justify-self-end flex justify-center w-1/2 bg-[#1b191b] min-w-max px-4 py-2 text-slate-200 rounded-lg hover:opacity-70' onClick={handleLogout}>
           <p>{`<-`}</p>
-          <p className='col-span-2'>Logout</p>
+          <p className='w-5/6'>Logout</p>
         </button>
       </div>
       <p className='text-[#1b191b] text-3xl sm:text-5xl w-full max-w-[1000px] text-center font-sans font-bold'>Find Your Furry Friend Today</p>
