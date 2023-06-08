@@ -47,12 +47,12 @@ const DogsPage = () => {
       setProgress("Component mounted. Starting data fetch");
       try {
         const dogsData = await fetchBreeds();
-        setProgress("Data fetch complete. Setting dot Data and stopping load");
+        setProgress("Data fetch complete. Setting dog Data and stopping load");
+        setProgress(dogsData)
         console.log(dogsData)
         setBreeds(dogsData);
         setLoading(false);
       } catch (error) {
-        setProgress("Data fetch failed");
         console.error('Error fetching dogs:', error);
       }
     };
