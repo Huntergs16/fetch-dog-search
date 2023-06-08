@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { 
   fetchBreeds, 
   searchDogs, 
@@ -35,6 +35,8 @@ const DogsPage = () => {
   const [favoritesIds, setFavoriteIds] = useState<string[]>([])
 
   const [progress, setProgress] = useState<string>("")
+
+  const [sortType, setSortType] = useState<string>("breed:asc")
 
   const handleBreedSearch = (event: { target: { value: string; }; }) => {
     const searchText = event.target.value.toLowerCase();
@@ -86,7 +88,7 @@ const DogsPage = () => {
     console.log('form submitted');
     console.log('Selected Breeds:', selectedBreeds);
     console.log('Zip Codes:', zipCodes);
-    const searchRes:DogSearchResult = await searchDogs({breeds: selectedBreeds, zipCodes, ageMin, ageMax});
+    const searchRes:DogSearchResult = await searchDogs({breeds: selectedBreeds, zipCodes, ageMin, ageMax, sort: sortType});
     if (searchRes.total != 0) {
       const dogsFound = await fetchDogs(searchRes.resultIds)
       console.log("Dogs found:", dogsFound)
@@ -103,6 +105,12 @@ const DogsPage = () => {
   
     console.log(searchRes.total, " Dogs Found");
     console.log(searchRes)
+  }
+
+  function handleSortChange() {
+    sortType === "breed:asc" ? setSortType("breed:desc") : setSortType("breed:asc");
+    // const event = new Event('submit');
+    // handleFormSubmit(event);
   }
 
   if (loading) {
@@ -282,33 +290,25 @@ const DogsPage = () => {
 
       <MatchFinder toggleFavorite={toggleFavoriteAdd} favoritesIds={favoritesIds} favoriteDogs={favorites}/>
 
-      {dogsFound.length > 0 && <SearchResultsSection favoritesIds={favoritesIds} handleFavorite={toggleFavoriteAdd} dogsFound={dogsFound} getNext={handleNextResults} getPrev={handlePrevResults} />}
+      {dogsFound.length > 0 && <SearchResultsSection sortType={sortType} toggleSortType={handleSortChange} favoritesIds={favoritesIds} handleFavorite={toggleFavoriteAdd} dogsFound={dogsFound} getNext={handleNextResults} getPrev={handlePrevResults} />}
     </main>
   );
 };
 
-const SearchResultsSection = ({dogsFound, getNext, getPrev, handleFavorite, favoritesIds}: 
+const SearchResultsSection = ({dogsFound, getNext, getPrev, handleFavorite, favoritesIds, sortType, toggleSortType}: 
   {
     dogsFound: DogWithCustomAge[],
     getNext: () => Promise<void>,
     getPrev: () => Promise<void>,
     handleFavorite: (dog: DogWithCustomAge) => void,
     favoritesIds: string[],
+    sortType: string,
+    toggleSortType: () => void,
 }) => {
   return (
     <div className='flex flex-wrap justify-center h-max bg-[#fba819] bg-opacity-60 shadow-xl border-[#fba819] border-double border py-10 px-6 gap-4 w-full max-w-[1000px] rounded-xl'>
-        <ResultsNavigator getNext={getNext} getPrev={getPrev} />
+        <ResultsNavigator sortType={sortType} toggleSortType={toggleSortType} getNext={getNext} getPrev={getPrev} />
         <ul className='flex flex-col gap-4 w-full text-base'>
-        {/* <li className='text-lg grid grid-cols-6 sm:grid-cols-7 w-full place-items-center gap-4'>
-              <div />
-              <div />
-              <div />
-              <div className='sm:hidden'/>
-              <p className='hidden sm:block'>Name</p>
-              <p className='hidden sm:block'>Breed</p>
-              <p>Age</p>
-              <p>Zipcode</p>
-              </li> */}
           {dogsFound.map((dog, index) => (
             <li className='grid grid-cols-6 sm:grid-cols-7 w-full place-items-center gap-4' key={index}>
               <Image onClick={() => handleFavorite(dog)} className='bg-transparent cursor-pointer hover:scale-110 active:scale-90' alt='like button' width={30} height={30} src={favoritesIds.includes(dog.id) ? "/heart-filled.png" : "/heart-like-button.png"} />
@@ -326,7 +326,7 @@ const SearchResultsSection = ({dogsFound, getNext, getPrev, handleFavorite, favo
               </li>
           ))}
         </ul>
-        <ResultsNavigator getNext={getNext} getPrev={getPrev} />
+        <ResultsNavigator sortType={sortType} toggleSortType={toggleSortType} getNext={getNext} getPrev={getPrev} />
       </div>
   )
 }
@@ -418,13 +418,21 @@ const MatchFinder = ({favoriteDogs, favoritesIds, toggleFavorite}: {
   )
 }
 
-const ResultsNavigator = ({getNext, getPrev}: {
+const ResultsNavigator = ({getNext, getPrev, sortType, toggleSortType}: {
   getNext: () => Promise<void>,
   getPrev: () => Promise<void>,
+  sortType: string,
+  toggleSortType: () => void,
 }) => {
   return (
     <div className='w-full px-2 flex justify-between items-center'>
       <button onClick={getPrev} className='w-[10%] bg-[#1b191b] min-w-max px-3 py-1 text-slate-200 rounded-lg hover:opacity-70'>{"<-"} Prev</button>
+      <div className='flex justify-center items-center'>
+        <button onClick={toggleSortType} className={`${sortType === "breed:asc" ? "rotate-90" : "-rotate-90"} text-2xl rotate-90 transition-all ease-in-out duration-200`}>{`->`}</button>
+        <div className='from-red-600 bg-gradient-to-tr bg-clip-text to-blue-600'>
+          <p className='text-transparent text-xl font-bold'>abc</p>
+        </div>
+      </div>
       <button onClick={getNext} className='w-[10%] bg-[#1b191b] min-w-max px-3 py-1 text-slate-200 rounded-lg hover:opacity-70'>Next {"->"}</button>
     </div>
   )

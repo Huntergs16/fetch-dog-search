@@ -37,12 +37,12 @@ export const fetchLocations = async () => {
   return response;
 };
 
-// Function to search dogs with filter options
 export const searchDogs = async (queryParameters: {
   breeds?: string[];
   zipCodes?: string[];
   ageMin?: number;
   ageMax?: number;
+  sort?: string;
 }) => {
   const url = `/dogs/search`;
 
@@ -65,8 +65,12 @@ export const searchDogs = async (queryParameters: {
     processedQueryParameters.ageMax = queryParameters.ageMax.toString();
   }
 
+  if (queryParameters.sort) {
+    processedQueryParameters.sort = queryParameters.sort;
+  }
+
   const queryParams = new URLSearchParams(processedQueryParameters);
-  const completeUrl = `${url}?${queryParams}`;
+  const completeUrl = `${url}?${queryParameters}`;
   console.log('Search URL:', completeUrl);
 
   const response = await fetchWithAuth(completeUrl, 'GET');
