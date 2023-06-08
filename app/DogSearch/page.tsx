@@ -52,7 +52,7 @@ const DogsPage = () => {
         setBreeds(dogsData);
         setLoading(false);
       } catch (error) {
-        setProgress("Data fetch failed ");
+        setProgress("Data fetch failed. \n Sorry, some devices aren't receiving access to the data.");
         console.error('Error fetching dogs:', error);
       }
     };
