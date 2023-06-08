@@ -1,4 +1,5 @@
 # Fetch Dog Search
+### https://fetch-dog-search.vercel.app/
 Fetch Dog Search is a web application that allows users to search for dogs available for adoption. Users can browse through a variety of dog breeds, filter dogs based on different criteria such as breed, age, and location, and add their favorite dogs to a favorites list. The application utilizes the Fetch.com API to fetch dog data and provide a seamless user experience.
 
 ## Features
@@ -7,13 +8,15 @@ View detailed information about each dog, including their name, breed, age, and 
 Add dogs to your favorites list for easy access.
 Generate a match for adoption based on your favorite dogs.
 Responsive design for optimal viewing on different devices.
-Technologies Used
-React - A JavaScript library for building user interfaces.
-Next.js - A framework for server-rendered React applications.
-Tailwind CSS - A utility-first CSS framework for rapidly building custom designs.
-Axios - A promise-based HTTP client for making API requests.
-Fetch.com API - A service for accessing dog adoption data.
-Getting Started
+## Technologies Used
+#### React - A JavaScript library for building user interfaces.
+#### Next.js - A framework for server-rendered React applications. 
+######   (The UI was all rendered client-slide, I used Next.js for the routing and boilerplate components.)
+#### Tailwind CSS - A utility-first CSS framework for rapidly building custom designs.
+#### Axios - A promise-based HTTP client for making API requests.
+#### Fetch.com API - A service for accessing dog adoption data.
+
+## Getting Started
 To get a local copy of the project up and running, follow these steps:
 
 ## Clone the repository:
