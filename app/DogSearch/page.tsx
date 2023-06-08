@@ -34,6 +34,7 @@ const DogsPage = () => {
   const [favorites, setFavorites] = useState<DogWithCustomAge[]>([]);
   const [favoritesIds, setFavoriteIds] = useState<string[]>([])
 
+  const [progress, setProgress] = useState<string>("")
 
   const handleBreedSearch = (event: { target: { value: string; }; }) => {
     const searchText = event.target.value.toLowerCase();
@@ -43,12 +44,15 @@ const DogsPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setProgress("Component mounted. Starting data fetch");
       try {
         const dogsData = await fetchBreeds();
+        setProgress("Data fetch complete. Setting dot Data and stopping load");
         console.log(dogsData)
         setBreeds(dogsData);
         setLoading(false);
       } catch (error) {
+        setProgress("Data fetch failed");
         console.error('Error fetching dogs:', error);
       }
     };
@@ -108,6 +112,7 @@ const DogsPage = () => {
           <Image className='motion-safe:animate-[spin_1.75s_linear_infinite]' width={120} height={120} alt='loading bone' src={"/bone.png"}/>
         </div>
         <p className='text-[#1b191b] text-4xl sm:text-6xl w-full max-w-[1000px] text-center font-sans font-bold'>Loading...</p>
+        <p className='text-[#1b191b] opacity-70 text-lg sm:text-2xl w-full max-w-[1000px] text-center font-sans font-bold'>{progress}</p>
       </div>
     )
   }
