@@ -257,7 +257,7 @@ const DogsPage = () => {
             onChange={handleInputChange}
           />
           {inputFocused && searchResults.length > 0 && (
-            <div className='w-[90%] mt-2 p-2 rounded-lg bg-[#1b191b] text-slate-200 overflow-y-hidden max-h-20'>
+            <div className='w-4/5 sm:w-1/2 mt-2 p-2 rounded-lg bg-[#1b191b] text-slate-200 overflow-y-hidden max-h-20'>
               <ul>
                 {searchResults.map((result, index) => (
                   <li
@@ -507,9 +507,9 @@ const ResultsNavigator = ({getNext, getPrev, sortType, toggleSortType}: {
             event.preventDefault()
             toggleSortType()
           }} 
-        className={`${sortType === "breed:asc" ? "rotate-90" : "-rotate-90"} text-2xl transition-all ease-in-out duration-200`}>{`->`}</button>
+        className={`${sortType === "breed:asc" ? "rotate-90" : "-rotate-90"} text-3xl transition-all ease-in-out duration-200`}>{`->`}</button>
         <div className='from-red-600 bg-gradient-to-tr bg-clip-text to-blue-600'>
-          <p className='text-transparent text-xl font-bold'>abc</p>
+          <p className='text-transparent text-lg font-bold'>abc</p>
         </div>
       </div>
       <button onClick={getNext} className='w-[10%] bg-[#1b191b] min-w-max px-3 py-1 text-slate-200 rounded-lg hover:opacity-70'>Next {"->"}</button>
