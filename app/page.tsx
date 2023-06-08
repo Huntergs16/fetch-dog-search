@@ -42,8 +42,10 @@ const Login = () => {
     try {
       const response = await login(name, email);
       console.log(response)
-      // Redirect the user to the search page or perform any other necessary actions
-      window.location.href = "/DogSearch";
+      if (response === "OK") {
+        // Redirect the user to the search page or perform any other necessary actions
+        window.location.href = "/DogSearch";
+      }
     } catch (error) {
       // Handle error responses or display error messages
       console.error('Error logging in:', error);
